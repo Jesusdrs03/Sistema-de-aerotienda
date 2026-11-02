@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Cada usuario puede leer su propio registro de administrador (para validar acceso)
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Todo lo demás: solo administradores registrados.
+    // La consulta pública de pedidos se hace por la API del servidor (/api/consulta),
+    // que solo devuelve datos no sensibles.
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
