@@ -4,11 +4,11 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   obtenerPedido, listarArticulos, registrarRecepcion, registrarEntrega, enviarAStock,
-  registrarCambio, anularPedido, editarAlumno, notificar,
+  registrarCambio, anularPedido, editarAlumno, registrarAviso,
 } from '@/lib/data';
-import { sedeNombre, MOTIVOS_DEVOLUCION, MOTIVOS_CAMBIO, CANALES } from '@/lib/config';
-import { fmtFecha, normalizarTelefono, tallaTxt } from '@/lib/utils';
-import { construirMensaje } from '@/lib/mensajes';
+import { sedeNombre, MOTIVOS_DEVOLUCION, MOTIVOS_CAMBIO, AVISOS } from '@/lib/config';
+import { fmtFecha, normalizarTelefono, tallaTxt, waLink } from '@/lib/utils';
+import { construirMensaje, avisoSugerido } from '@/lib/mensajes';
 import { Alerta, Badge, Campo, Cargando, Modal } from '@/components/ui';
 
 export default function DetallePedido() {
@@ -18,22 +18,13 @@ export default function DetallePedido() {
   const [articulos, setArticulos] = useState([]);
   const [modal, setModal] = useState(null);
   const [msg, setMsg] = useState(null);
-  const [canal, setCanal] = useState(process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || 'sms');
-  const [enviando, setEnviando] = useState(false);
 
   const cargar = useCallback(() => obtenerPedido(id).then(setP).catch((e) => setMsg({ type: 'error', text: e.message })), [id]);
 
   useEffect(() => {
     cargar();
     listarArticulos().then(setArticulos);
-    const r = sessionStorage.getItem('notifResult');
-    if (r) {
-      sessionStorage.removeItem('notifResult');
-      const j = JSON.parse(r);
-      setMsg(j.ok
-        ? { type: 'ok', text: `Pedido registrado y mensaje enviado por ${j.canal} a ${j.telefono}` }
-        : { type: 'error', text: `Pedido registrado, pero el mensaje no se envió: ${j.error}. Puedes usar el botón de WhatsApp manual.` });
-    } else if (document.referrer.includes('/pedidos/nuevo')) setMsg({ type: 'ok', text: 'Pedido registrado' });
+    if (document.referrer.includes('/pedidos/nuevo')) setMsg({ type: 'ok', text: 'Pedido registrado' });
   }, [cargar]);
 
   async function ejecutar(fn, ok) {
@@ -41,11 +32,8 @@ export default function DetallePedido() {
     catch (e) { setMsg({ type: 'error', text: e.message }); setModal(null); }
   }
 
-  async function enviarNotif(tipo) {
-    setEnviando(true);
-    const r = await notificar(p.id, tipo, canal);
-    setEnviando(false);
-    setMsg(r.ok ? { type: 'ok', text: `Mensaje enviado por ${r.canal} a ${r.telefono}` } : { type: 'error', text: `No se envió: ${r.error}` });
+  async function avisar(tipo) {
+    await registrarAviso(p.id, tipo).catch(() => {});
     cargar();
   }
 
@@ -55,8 +43,9 @@ export default function DetallePedido() {
   const activo = !p.anulado;
   const items = p.items || [];
   const tel = normalizarTelefono(p.alumno?.telefono);
-  const tipoMsg = p.recibidoEn ? 'llegada' : 'registro';
-  const waLink = tel ? `https://wa.me/${tel.replace('+', '')}?text=${encodeURIComponent(construirMensaje(tipoMsg, p, window.location.origin))}` : null;
+  const sugerido = avisoSugerido(p);
+  const enlace = (tipo) => waLink(tel, construirMensaje(tipo, p, window.location.origin));
+  const NOMBRE_AVISO = Object.fromEntries(AVISOS.map((a) => [a.id, a.nombre]));
 
   return (
     <>
@@ -68,7 +57,7 @@ export default function DetallePedido() {
         </div>
         {activo && (
           <div className="row noprint">
-            <button className="btn" onClick={() => setModal({ t: 'recepcion' })}>📥 Registrar llegada</button>
+            <button className="btn" onClick={() => setModal({ t: 'recepcion' })}>📥 Actualizar lo recibido</button>
             <button className="btn ok" onClick={() => setModal({ t: 'entrega' })}>✅ Entregar al alumno</button>
           </div>
         )}
@@ -87,25 +76,22 @@ export default function DetallePedido() {
           {p.notas && <p className="muted">Notas: {p.notas}</p>}
         </div>
         <div className="card noprint">
-          <h2>Mensajes al alumno</h2>
-          <div className="row">
-            <select style={{ width: 'auto' }} value={canal} onChange={(e) => setCanal(e.target.value)}>
-              {CANALES.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-            </select>
-          </div>
-          <div className="row" style={{ marginTop: 10 }}>
-            <button className="btn sec sm" disabled={enviando || !tel} onClick={() => enviarNotif('registro')}>Reenviar registro</button>
-            <button className="btn sec sm" disabled={enviando || !tel} onClick={() => enviarNotif('llegada')}>Avisar llegada</button>
-            <button className="btn sec sm" disabled={enviando || !tel} onClick={() => enviarNotif('entrega')}>Confirmar entrega</button>
-            {waLink && <a className="btn wa sm" href={waLink} target="_blank" rel="noreferrer">WhatsApp manual</a>}
-          </div>
-          {!tel && <p className="muted">El alumno no tiene teléfono registrado.</p>}
+          <h2>Avisar al alumno por WhatsApp</h2>
+          {!tel ? <p className="muted">El alumno no tiene teléfono registrado. Agrégalo con el botón Editar.</p> : (
+            <>
+              <p className="muted" style={{ marginTop: -6 }}>Se abre WhatsApp con el mensaje ya escrito para {p.alumno?.telefono}. Solo tienes que darle a enviar.</p>
+              <div className="row">
+                {AVISOS.map((a) => (
+                  <a key={a.id} className={`btn sm ${a.id === sugerido ? 'wa' : 'sec'}`} href={enlace(a.id)} target="_blank" rel="noreferrer" onClick={() => avisar(a.id)}>
+                    {a.id === sugerido ? '💬 ' : ''}{a.nombre}
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
           <ul className="timeline" style={{ marginTop: 12 }}>
-            {[...(p.notificaciones || [])].reverse().slice(0, 5).map((n, i) => (
-              <li key={i}>
-                <span className={`badge ${n.ok ? 'green' : 'red'}`}>{n.ok ? 'Enviado' : 'Falló'}</span> {n.tipo} · {n.canal} · {fmtFecha(n.fecha)}
-                {n.error && <div className="muted">{n.error}</div>}
-              </li>
+            {[...(p.notificaciones || [])].filter((n) => n.canal === 'whatsapp').reverse().slice(0, 6).map((n, i) => (
+              <li key={i}>💬 {NOMBRE_AVISO[n.tipo] || n.tipo} <span className="muted">· {fmtFecha(n.fecha)} · {n.usuario}</span></li>
             ))}
           </ul>
         </div>
@@ -189,11 +175,11 @@ function RecepcionModal({ p, onClose, onOk }) {
   const [b, run] = useEnviando();
   const completo = p.items.every((it, i) => Number(rec[i]) >= it.cantidad);
   return (
-    <Modal titulo="Registrar llegada a la sede" onClose={onClose} footer={<>
+    <Modal titulo="Actualizar lo recibido" onClose={onClose} footer={<>
       <button className="btn sec" onClick={onClose}>Cancelar</button>
       <button className="btn" disabled={b} onClick={() => run(() => onOk(rec, sob, obs))}>Guardar</button>
     </>}>
-      <p className="muted">Indica cuántas unidades llegaron de cada artículo. Si llegó de más (repetido), ponlo en “Sobrante” y pasará al stock.</p>
+      <p className="muted">Úsalo cuando llegue lo que faltaba o para corregir cantidades. Indica el total recibido de cada artículo. Si llegó de más (repetido), ponlo en “Sobrante” y pasará al stock.</p>
       <div className="tablewrap"><table>
         <thead><tr><th>Artículo</th><th>Pedido</th><th>Llegó</th><th>Sobrante → stock</th></tr></thead>
         <tbody>{p.items.map((it, i) => (
