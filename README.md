@@ -116,6 +116,6 @@ Se calculan solos según lo que registres en llegada y entrega.
 - `movimientos` — cada entrega, devolución, cambio, reasignación, ingreso y ajuste (base de los reportes)
 - `admins/{uid}` — usuarios con acceso al panel
 - `contadores` — numeración automática de pedidos
-
+Publicado en Vercel
 ## Agregar otra sede
 Edita `lib/config.js` → arreglo `SEDES` (id, nombre y prefijo para la numeración).
