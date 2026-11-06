@@ -15,7 +15,7 @@ reasignaciones), sacar reportes y avisar al alumno por **WhatsApp**.
 | Módulo | Función |
 |---|---|
 | **Consulta pública** (`/`) | El alumno escribe su N° de pedido y ve si llegó y si se le entregó. Solo muestra datos no sensibles (nombre abreviado, artículos, estado). |
-| **Artículos** | Tú creas el catálogo (nombre, categoría, tallas, precio opcional). Puedes activarlos o desactivarlos. |
+| **Artículos** | Botón **Importar / actualizar desde la tienda**: carga los productos de la categoría Aerotienda de store.aeroidea.net con sus variantes (talla, color, género, modelo) y precio. También puedes crear o editar artículos a mano y activarlos o desactivarlos. |
 | **Nuevo pedido** | Dos opciones: **Pedido realizado** (el alumno lo hizo y aún no llega; queda con estado *Pedido realizado*) o **Pedido que ya llegó** (para los que llegan sin estar registrados; se indica cuánto llegó). Al guardar se abre WhatsApp con el aviso para el alumno. |
 | **Recibir pedido** | Cuando llega un pedido, escribes su número: si ya estaba registrado aparece para confirmar lo que llegó y pasa a *En la sede*; si no existe, se registra ahí mismo como recibido. Se abre WhatsApp con el aviso (llegó / llegó incompleto). |
 | **Actualizar lo recibido** | Cuando llega lo que faltaba, o para corregir cantidades. Lo que llegue **repetido o de más** pasa directo al stock. |

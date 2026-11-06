@@ -1,0 +1,831 @@
+[
+ {
+  "tiendaId": 822098,
+  "nombre": "MANUAL DE PROCEDIMIENTOS OPERACIONALES ESTANDAR FAA",
+  "categoria": "Libros",
+  "tallas": [],
+  "precio": 60,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/manual-de-procedimientos-operacionales-estandar-faa/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2026/09/WhatsApp-Image-2026-09-16-at-11.38.57-AM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 779450,
+  "nombre": "Bolígrafo de Helicoptero",
+  "categoria": "Accesorios",
+  "tallas": [
+   "Morado",
+   "Verde",
+   "Dorado",
+   "Plateado",
+   "Azul",
+   "Bronce"
+  ],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/boligrafo-de-helicoptero/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-16-at-10.29.21-AM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 778397,
+  "nombre": "Kit Piloto Completo",
+  "categoria": "Kits de Piloto",
+  "tallas": [
+   "S",
+   "M",
+   "L",
+   "XL"
+  ],
+  "precio": 300,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/kit-piloto-completo/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-11-at-5.35.32-PM-e1757627911576-247x296.jpeg"
+ },
+ {
+  "tiendaId": 778388,
+  "nombre": "Kit de Navegación Completo",
+  "categoria": "Kits de Piloto",
+  "tallas": [],
+  "precio": 150,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/kit-de-navegacion-completo/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-11-at-5.35.12-PM-3-e1757627518504-247x296.jpeg"
+ },
+ {
+  "tiendaId": 778359,
+  "nombre": "Kit de Navegación Basico",
+  "categoria": "Kits de Piloto",
+  "tallas": [],
+  "precio": 90,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/kit-de-navegacion-basico/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-11-at-5.04.48-PM-1-e1757627637115-247x296.jpeg"
+ },
+ {
+  "tiendaId": 777812,
+  "nombre": "Lampara de Cristal",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 50,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/lampara-de-cristal/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/09/WhatsApp-Image-2025-09-02-at-9.21.58-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 776260,
+  "nombre": "Kit de Vuelo para Piloto",
+  "categoria": "Kits de Piloto",
+  "tallas": [
+   "S",
+   "M",
+   "L",
+   "XL"
+  ],
+  "precio": 150,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/kit-de-vuelo-para-piloto/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-11-at-5.34.29-PM-e1757626968785-247x296.jpeg"
+ },
+ {
+  "tiendaId": 776252,
+  "nombre": "Kit Piloto Inicial",
+  "categoria": "Kits de Piloto",
+  "tallas": [
+   "S",
+   "M",
+   "L",
+   "XL"
+  ],
+  "precio": 100,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/kit-piloto-basico/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/08/WhatsApp-Image-2025-09-11-at-5.04.48-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 757511,
+  "nombre": "Colas para cabello",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 2,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/colas-para-cabello/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/03/ligas-247x296.png"
+ },
+ {
+  "tiendaId": 757501,
+  "nombre": "Malla para cabello de TDC",
+  "categoria": "Accesorios",
+  "tallas": [
+   "Negro",
+   "Castaño medio",
+   "Castaño claro"
+  ],
+  "precio": 2,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/malla-para-cabello-de-tdc/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/03/2.1-247x296.png"
+ },
+ {
+  "tiendaId": 754916,
+  "nombre": "Falda de TDC",
+  "categoria": "Accesorios",
+  "tallas": [
+   "S",
+   "M",
+   "L",
+   "XL"
+  ],
+  "precio": 20,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/falda-de-tdc/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2025/02/WhatsApp-Image-2025-02-05-at-11.38.54-AM-1-e1738770202299-247x296.jpeg"
+ },
+ {
+  "tiendaId": 752112,
+  "nombre": "Boligrafo de Avion",
+  "categoria": "Accesorios",
+  "tallas": [
+   "Verde",
+   "Dorado",
+   "Plateado",
+   "Azul",
+   "Bronce"
+  ],
+  "precio": 10,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/boligrafo-de-avion/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/12/WhatsApp-Image-2024-12-30-at-8.04.32-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 750806,
+  "nombre": "Chaleco Reflectivo IDEA",
+  "categoria": "Uniformes",
+  "tallas": [],
+  "precio": 7,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/chaleco-reflectivo-idea/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/12/WhatsApp-Image-2025-01-08-at-4.53.49-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 748709,
+  "nombre": "Tazas",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/tazas/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/11/WhatsApp-Image-2024-11-08-at-4.18.19-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 748272,
+  "nombre": "Ala de Pecho Completa",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/ala-de-pecho-completa/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/11/ala-de-pecho-247x296.png"
+ },
+ {
+  "tiendaId": 748232,
+  "nombre": "Medias Pantys",
+  "categoria": "Accesorios",
+  "tallas": [
+   "Medias Finas",
+   "Medias Gruesas"
+  ],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/medias-pantys/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/11/WhatsApp-Image-2024-11-01-at-4.35.49-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 745785,
+  "nombre": "Uniforme de Gala TDC",
+  "categoria": "Uniformes",
+  "tallas": [
+   "S",
+   "M",
+   "L",
+   "XL"
+  ],
+  "precio": 90,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/uniforme-de-gala-tdc/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/WhatsApp-Image-2024-09-29-at-4.52.46-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 745152,
+  "nombre": "Blazer de TDC",
+  "categoria": "Accesorios",
+  "tallas": [
+   "S · Azul Marino",
+   "S · Negro",
+   "M · Azul Marino",
+   "M · Negro",
+   "L · Azul Marino",
+   "L · Negro",
+   "XL · Azul Marino",
+   "XL · Negro"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/blazer-de-tdc/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/09/ec705324-1e02-48df-a5bb-98c4164871f9-247x296.jpeg"
+ },
+ {
+  "tiendaId": 745150,
+  "nombre": "Gorro de TDC",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 20,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/gorro-de-tdc/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/09/WhatsApp-Image-2024-09-29-at-4.52.33-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 744257,
+  "nombre": "Zarcillos",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 2,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/zarcillos/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/09/WhatsApp-Image-2025-07-24-at-1.29.24-PM-e1753378227447-247x296.jpeg"
+ },
+ {
+  "tiendaId": 744235,
+  "nombre": "Reloj Analógico",
+  "categoria": "Accesorios",
+  "tallas": [
+   "Dama · 1",
+   "Dama · 2",
+   "Dama · 3",
+   "Dama · 4",
+   "Dama · 5",
+   "Caballero · 1",
+   "Caballero · 2",
+   "Caballero · 3",
+   "Caballero · 4",
+   "Caballero · 5"
+  ],
+  "precio": 10,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/reloj-analogico/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/09/WhatsApp-Image-2025-12-05-at-11.14.55-AM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 740277,
+  "nombre": "PORTANOMBRE IDEA",
+  "categoria": "Accesorios",
+  "tallas": [
+   "Nombre con la inicial del apellido",
+   "Apellido con la inicial del nombre"
+  ],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/portanombre-idea/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/07/WhatsApp-Image-2024-07-23-at-10.08.01-AM-e1721763096414-247x296.jpeg"
+ },
+ {
+  "tiendaId": 735742,
+  "nombre": "Pin de Avion",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/pin-de-avion/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-20-at-10.43.26-AM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 735736,
+  "nombre": "Media Ala IDEA",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 15,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/media-ala-idea/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2024/05/WhatsApp-Image-2024-05-20-at-10.43.10-AM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 684883,
+  "nombre": "Sudadera – Manga Corta",
+  "categoria": "Sudaderas",
+  "tallas": [
+   "Dama · Azul",
+   "Dama · Verde",
+   "Caballero · Azul",
+   "Caballero · Verde"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/sudadera-manga-corta/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/15-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 682201,
+  "nombre": "Franela All Women",
+  "categoria": "Franelas",
+  "tallas": [
+   "S · Blanco-Fucsia",
+   "S · Blanco-Rosado",
+   "S · Blanco-Rojo",
+   "M · Blanco-Fucsia",
+   "M · Blanco-Rosado",
+   "M · Blanco-Rojo",
+   "L · Blanco-Fucsia",
+   "L · Blanco-Rosado",
+   "L · Blanco-Rojo"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/franela-all-woman/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/2-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 680888,
+  "nombre": "Camisa Manga Larga – Huella Dactilar – Caballero",
+  "categoria": "Camisas",
+  "tallas": [
+   "S · Blanco",
+   "S · Negro",
+   "S · Azul",
+   "S · Vinotinto",
+   "M · Blanco",
+   "M · Negro",
+   "M · Azul",
+   "M · Vinotinto",
+   "L · Blanco",
+   "L · Negro",
+   "L · Azul",
+   "L · Vinotinto",
+   "XL · Blanco",
+   "XL · Negro",
+   "XL · Azul",
+   "XL · Vinotinto"
+  ],
+  "precio": 60,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/camisa-manga-larga-ppa-huella-dactilar-caballero-2/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/5-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 680830,
+  "nombre": "Llaveros",
+  "categoria": "Accesorios",
+  "tallas": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "11",
+   "12",
+   "13",
+   "14",
+   "15"
+  ],
+  "precio": 2,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/llaveros/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/WhatsApp-Image-2025-08-09-at-4.19.59-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 680827,
+  "nombre": "Lampara Led 3D",
+  "categoria": "Accesorios",
+  "tallas": [
+   "1",
+   "2"
+  ],
+  "precio": null,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/lampara-led-3d/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/WhatsApp-Image-2023-10-31-at-3.05.36-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 680819,
+  "nombre": "Conjunto Deportivo",
+  "categoria": "Uniformes",
+  "tallas": [
+   "Dama · S · Cessna",
+   "Dama · S · Aviation",
+   "Dama · S · DNA",
+   "Dama · S · Boeing",
+   "Dama · M · Cessna",
+   "Dama · M · Aviation",
+   "Dama · M · DNA",
+   "Dama · M · Boeing",
+   "Caballero · S · Cessna",
+   "Caballero · S · Aviation",
+   "Caballero · S · DNA",
+   "Caballero · S · Boeing",
+   "Caballero · M · Cessna",
+   "Caballero · M · Aviation",
+   "Caballero · M · DNA",
+   "Caballero · M · Boeing"
+  ],
+  "precio": 40,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/conjunto-deportivo/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/4-1-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 680810,
+  "nombre": "Camisa Manga Larga – Huella Dactilar – Dama",
+  "categoria": "Camisas",
+  "tallas": [
+   "S · Blanco",
+   "S · Negro",
+   "S · Azul",
+   "S · Vinotinto",
+   "M · Blanco",
+   "M · Negro",
+   "M · Azul",
+   "M · Vinotinto",
+   "L · Blanco",
+   "L · Negro",
+   "L · Azul",
+   "L · Vinotinto",
+   "XL · Blanco",
+   "XL · Negro",
+   "XL · Azul",
+   "XL · Vinotinto"
+  ],
+  "precio": null,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/camisa-manga-larga-ppa-huella-dactilar/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/14-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 680802,
+  "nombre": "Corbata Idea",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/corbata-idea/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/20250107_134931-scaled-e1736273316592-247x296.jpg"
+ },
+ {
+  "tiendaId": 680796,
+  "nombre": "Camisa de Taller TMA",
+  "categoria": "Camisas",
+  "tallas": [
+   "Dama · S",
+   "Dama · M",
+   "Dama · L",
+   "Caballero · S",
+   "Caballero · M",
+   "Caballero · L"
+  ],
+  "precio": 55,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/bata-de-taller-tma/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/TMA-4-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 680744,
+  "nombre": "Chaquetas Impermeable",
+  "categoria": "Chaquetas",
+  "tallas": [
+   "S · Pilot",
+   "S · Boeing",
+   "S · Aviation",
+   "M · Pilot",
+   "M · Boeing",
+   "M · Aviation",
+   "L · Pilot",
+   "L · Boeing",
+   "L · Aviation"
+  ],
+  "precio": 80,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/chaquetas-impermeable/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/4-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 680736,
+  "nombre": "Chemise Embraer",
+  "categoria": "Chemises",
+  "tallas": [
+   "S · Blanco",
+   "S · Negro",
+   "M · Blanco",
+   "M · Negro"
+  ],
+  "precio": 30,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/chemise/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/12-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 659211,
+  "nombre": "Camisa de Piloto Manga Corta – PPA",
+  "categoria": "Camisas",
+  "tallas": [
+   "Dama · S",
+   "Dama · M",
+   "Dama · L",
+   "Dama · XL",
+   "Caballero · S",
+   "Caballero · M",
+   "Caballero · L",
+   "Caballero · XL"
+  ],
+  "precio": 40,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/camisa-de-piloto-m-manga-corta-clasica-idea-sin-acesorios/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/01/msg5770520064-5460-247x296.jpg"
+ },
+ {
+  "tiendaId": 659213,
+  "nombre": "Uniforme de Gala Piloto – PPA",
+  "categoria": "Uniformes",
+  "tallas": [
+   "Dama · S · Con accesorios",
+   "Dama · S · Sin accesorios",
+   "Dama · M · Con accesorios",
+   "Dama · M · Sin accesorios",
+   "Dama · L · Con accesorios",
+   "Dama · L · Sin accesorios",
+   "Dama · XL · Con accesorios",
+   "Dama · XL · Sin accesorios",
+   "Caballero · S · Con accesorios",
+   "Caballero · S · Sin accesorios",
+   "Caballero · M · Con accesorios",
+   "Caballero · M · Sin accesorios",
+   "Caballero · L · Con accesorios",
+   "Caballero · L · Sin accesorios",
+   "Caballero · XL · Con accesorios",
+   "Caballero · XL · Sin accesorios"
+  ],
+  "precio": 60,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/camisa-de-piloto-manga-larga/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/03/PPA-247x296.png"
+ },
+ {
+  "tiendaId": 660001,
+  "nombre": "Uniforme de gala – TMA",
+  "categoria": "Uniformes",
+  "tallas": [
+   "Dama · S",
+   "Dama · M",
+   "Dama · L",
+   "Dama · XL",
+   "Caballero · S",
+   "Caballero · M",
+   "Caballero · L",
+   "Caballero · XL"
+  ],
+  "precio": 55,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/camisa-de-tma/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2023/01/TMA-7-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 607021,
+  "nombre": "Franelas Flight Attendant",
+  "categoria": "Franelas",
+  "tallas": [
+   "S · Negro-fucsia",
+   "S · Negro-Dorado",
+   "S · Negro-Azul",
+   "M · Negro-fucsia",
+   "M · Negro-Dorado",
+   "M · Negro-Azul"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/franelas-all-woman/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/11/franle-1-247x296.png"
+ },
+ {
+  "tiendaId": 606322,
+  "nombre": "Chaqueta Aircraft Mechanic",
+  "categoria": "Chaquetas",
+  "tallas": [
+   "M",
+   "L",
+   "U"
+  ],
+  "precio": 30,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/chaquetas/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/11/7-247x296.jpg"
+ },
+ {
+  "tiendaId": 606284,
+  "nombre": "Chemise Piloto – Caballero",
+  "categoria": "Chemises",
+  "tallas": [
+   "M · Blanco · Pilot III",
+   "M · Blanco · Escudo",
+   "M · Negro · Pilot III",
+   "M · Negro · Escudo",
+   "S · Blanco · Pilot III",
+   "S · Blanco · Escudo",
+   "S · Negro · Pilot III",
+   "S · Negro · Escudo"
+  ],
+  "precio": 30,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/chemise-piloto/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/11/Escudo1-247x296.png"
+ },
+ {
+  "tiendaId": 606186,
+  "nombre": "Uniforme casual",
+  "categoria": "Uniformes",
+  "tallas": [
+   "Dama · S",
+   "Dama · M",
+   "Dama · L",
+   "Dama · XL",
+   "Caballero · S",
+   "Caballero · M",
+   "Caballero · L",
+   "Caballero · XL"
+  ],
+  "precio": 30,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/chemises/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/11/IDEA-4-1-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 595922,
+  "nombre": "Gorra IDEA",
+  "categoria": "Gorras",
+  "tallas": [
+   "Blanco",
+   "Negro",
+   "Azul Marino",
+   "Caqui"
+  ],
+  "precio": 10,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/gorra/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/11/Screenshot_5-247x296.png"
+ },
+ {
+  "tiendaId": 590883,
+  "nombre": "Bitácora de Piloto",
+  "categoria": "Accesorios",
+  "tallas": [
+   "RPA",
+   "Piloto"
+  ],
+  "precio": 30,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/bitacora-para-piloto/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/IMG_3741-247x296.jpg"
+ },
+ {
+  "tiendaId": 590147,
+  "nombre": "Franela Aviation DNA",
+  "categoria": "Franelas",
+  "tallas": [
+   "S",
+   "M",
+   "L",
+   "XL"
+  ],
+  "precio": 30,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/franela-aviation-dna/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/Screenshot_4-247x296.png"
+ },
+ {
+  "tiendaId": 590137,
+  "nombre": "Franela Cessna",
+  "categoria": "Franelas",
+  "tallas": [
+   "XL",
+   "L",
+   "U"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/franela-cessna/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/Screenshot_3-247x296.png"
+ },
+ {
+  "tiendaId": 590107,
+  "nombre": "Franela Aircraft Mechanic",
+  "categoria": "Franelas",
+  "tallas": [
+   "L · Amarillo - Blanco",
+   "L · Amarillo - Negro",
+   "U · Amarillo - Blanco",
+   "U · Amarillo - Negro",
+   "XL · Amarillo - Blanco",
+   "XL · Amarillo - Negro"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/franela-aircraft/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/Screenshot_f-247x296.png"
+ },
+ {
+  "tiendaId": 588158,
+  "nombre": "Caponas de Piloto",
+  "categoria": "Accesorios",
+  "tallas": [
+   "1 Linea",
+   "2 Lineas"
+  ],
+  "precio": 5,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/caponas-de-piloto/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/20250107_134319-scaled-e1736273533350-247x296.jpg"
+ },
+ {
+  "tiendaId": 587045,
+  "nombre": "Bufanda de Tripulante",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 10,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/bufanda-de-tripulante/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/WhatsApp-Image-2024-09-29-at-4.52.46-PM-247x296.jpeg"
+ },
+ {
+  "tiendaId": 585447,
+  "nombre": "Uniforme Ejecutivo (Despachador de Vuelo)",
+  "categoria": "Uniformes",
+  "tallas": [
+   "Dama · S",
+   "Dama · SS",
+   "Dama · M",
+   "Dama · L",
+   "Dama · XL",
+   "Caballero · S",
+   "Caballero · SS",
+   "Caballero · M",
+   "Caballero · L",
+   "Caballero · XL"
+  ],
+  "precio": 55,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/camisa-ejecutiva/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/IDEA-2-247x296.jpg"
+ },
+ {
+  "tiendaId": 579568,
+  "nombre": "Uniforme Deportivo IDEA",
+  "categoria": "Uniformes",
+  "tallas": [
+   "Dama · S",
+   "Dama · M",
+   "Dama · L",
+   "Dama · XL",
+   "Dama · U",
+   "Caballero · S",
+   "Caballero · M",
+   "Caballero · L",
+   "Caballero · XL",
+   "Caballero · U"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/franela-deportiva/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/10/DEPORTIVO-1-scaled-247x296.jpg"
+ },
+ {
+  "tiendaId": 543171,
+  "nombre": "Carnet",
+  "categoria": "Accesorios",
+  "tallas": [],
+  "precio": 15,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/carnet/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2022/09/CARNET-01-PARTE-ADELANTE-247x296.png"
+ },
+ {
+  "tiendaId": 86701,
+  "nombre": "Franelas Heartbeats",
+  "categoria": "Franelas",
+  "tallas": [
+   "S · Rojo - Blanco",
+   "S · Rojo - Amarillo",
+   "M · Rojo - Blanco",
+   "M · Rojo - Amarillo",
+   "L · Rojo - Blanco",
+   "L · Rojo - Amarillo",
+   "XL · Rojo - Blanco",
+   "XL · Rojo - Amarillo",
+   "U · Rojo - Blanco",
+   "U · Rojo - Amarillo"
+  ],
+  "precio": 25,
+  "moneda": "EUR",
+  "url": "https://store.aeroidea.net/producto/bata-taller/",
+  "imagen": "https://store.aeroidea.net/wp-content/uploads/2021/01/IMG_3315-247x296.jpg"
+ }
+]

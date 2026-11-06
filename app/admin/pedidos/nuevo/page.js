@@ -8,6 +8,7 @@ import { waLink } from '@/lib/utils';
 import { useAdmin } from '@/components/AdminContext';
 import { Alerta, Campo, Cargando } from '@/components/ui';
 
+const CATS = (arts) => Object.entries(arts.reduce((m, a) => ((m[a.categoria || 'Otros'] ||= []).push(a), m), {})).sort(([a], [b]) => a.localeCompare(b));
 const linea = () => ({ articuloId: '', talla: '', cantidad: 1, recibido: '' });
 
 export default function NuevoPedido() {
@@ -128,7 +129,7 @@ export default function NuevoPedido() {
         <h2>Artículos</h2>
         <div className="tablewrap">
           <table>
-            <thead><tr><th>Artículo</th><th>Talla</th><th>Cantidad</th>{llegoYa && <th>Llegó</th>}<th></th></tr></thead>
+            <thead><tr><th>Artículo</th><th>Talla / variante</th><th>Cantidad</th>{llegoYa && <th>Llegó</th>}<th></th></tr></thead>
             <tbody>
               {items.map((it, i) => {
                 const a = articulos.find((x) => x.id === it.articuloId);
@@ -138,7 +139,7 @@ export default function NuevoPedido() {
                     <td style={{ minWidth: 220 }}>
                       <select value={it.articuloId} onChange={(e) => setItem(i, 'articuloId', e.target.value)}>
                         <option value="">— Seleccionar —</option>
-                        {articulos.map((x) => <option key={x.id} value={x.id}>{x.nombre}{x.categoria ? ` · ${x.categoria}` : ''}</option>)}
+                        {CATS(articulos).map(([cat, lista]) => <optgroup key={cat} label={cat}>{lista.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}</optgroup>)}
                       </select>
                     </td>
                     <td style={{ minWidth: 110 }}>
