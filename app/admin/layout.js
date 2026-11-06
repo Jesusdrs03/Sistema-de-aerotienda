@@ -11,6 +11,7 @@ import { AdminContext } from '@/components/AdminContext';
 const NAV = [
   ['/admin', '📊 Inicio'],
   ['/admin/pedidos/nuevo', '➕ Nuevo pedido'],
+  ['/admin/recibir', '📥 Recibir pedido'],
   ['/admin/pedidos', '📦 Pedidos'],
   ['/admin/stock', '🏷️ Stock y reasignación'],
   ['/admin/articulos', '👕 Artículos'],

@@ -1,6 +1,6 @@
 # ✈️ Aerotienda — Gestión de pedidos, entregas y stock
 
-Sistema web para registrar los pedidos que **llegan a la sede** (enviados desde **Barquisimeto**), llevar el
+Sistema web para registrar los pedidos de los alumnos y su **llegada a la sede** (enviados desde **Barquisimeto**), llevar el
 control interno de entregas en **Caracas – Santa Mónica**, manejar stock (repetidos, devoluciones, cambios,
 reasignaciones), sacar reportes y avisar al alumno por **WhatsApp**.
 
@@ -16,7 +16,8 @@ reasignaciones), sacar reportes y avisar al alumno por **WhatsApp**.
 |---|---|
 | **Consulta pública** (`/`) | El alumno escribe su N° de pedido y ve si llegó y si se le entregó. Solo muestra datos no sensibles (nombre abreviado, artículos, estado). |
 | **Artículos** | Tú creas el catálogo (nombre, categoría, tallas, precio opcional). Puedes activarlos o desactivarlos. |
-| **Nuevo pedido** | Se registra cuando el pedido **ya llegó** a la sede: N° de pedido (o automático), datos del alumno, artículos, cuánto se pidió y **cuánto llegó**. Si falta algo queda marcado como *incompleto*. Al guardar **se abre WhatsApp** con el aviso para el alumno. |
+| **Nuevo pedido** | Dos opciones: **Pedido realizado** (el alumno lo hizo y aún no llega; queda con estado *Pedido realizado*) o **Pedido que ya llegó** (para los que llegan sin estar registrados; se indica cuánto llegó). Al guardar se abre WhatsApp con el aviso para el alumno. |
+| **Recibir pedido** | Cuando llega un pedido, escribes su número: si ya estaba registrado aparece para confirmar lo que llegó y pasa a *En la sede*; si no existe, se registra ahí mismo como recibido. Se abre WhatsApp con el aviso (llegó / llegó incompleto). |
 | **Actualizar lo recibido** | Cuando llega lo que faltaba, o para corregir cantidades. Lo que llegue **repetido o de más** pasa directo al stock. |
 | **Entregar al alumno** | Entrega total o parcial. Opción "tomar del stock" para la **venta directa** cuando abras la aerotienda de Santa Mónica. |
 | **A stock** | Artículo repetido, sobrante, devuelto por el alumno, defectuoso… queda en stock de la sede. |
@@ -88,7 +89,7 @@ firebase emulators:start --only auth,firestore --project demo-aerotienda
 ---
 
 ## Estados de un pedido
-`Recibido completo` / `Recibido incompleto` → `Entregado parcial` → `Entregado` (o `Anulado`).
+`Pedido realizado` → `En la sede (completo)` / `En la sede (incompleto)` → `Entregado parcial` → `Entregado` (o `Anulado`).
 Se calculan solos según lo que registres en llegada y entrega.
 
 ## Estructura de datos (Firestore)

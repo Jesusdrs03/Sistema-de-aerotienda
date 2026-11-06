@@ -25,9 +25,10 @@ export default function Inicio() {
 
   return (
     <>
-      <div className="row between"><h1>Inicio</h1><Link className="btn" href="/admin/pedidos/nuevo">➕ Registrar pedido</Link></div>
+      <div className="row between"><h1>Inicio</h1><div className="row"><Link className="btn sec" href="/admin/recibir">📥 Recibir pedido</Link><Link className="btn" href="/admin/pedidos/nuevo">➕ Nuevo pedido</Link></div></div>
       <div className="stats">
-        <div className="stat"><b>{c(['recibido', 'recibido_incompleto', 'entregado_parcial'])}</b><span>Por entregar a alumnos</span></div>
+        <div className="stat"><b>{c(['en_transito'])}</b><span>Pedidos realizados (por llegar)</span></div>
+        <div className="stat"><b>{c(['recibido', 'recibido_incompleto', 'entregado_parcial'])}</b><span>En la sede por entregar</span></div>
         <div className="stat"><b>{c(['recibido_incompleto'])}</b><span>Llegaron incompletos</span></div>
         <div className="stat"><b>{c(['entregado'])}</b><span>Entregados</span></div>
         <div className="stat"><b>{unidades}</b><span>Unidades en stock</span></div>

@@ -3,13 +3,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  obtenerPedido, listarArticulos, registrarRecepcion, registrarEntrega, enviarAStock,
+  obtenerPedido, listarArticulos, registrarEntrega, enviarAStock,
   registrarCambio, anularPedido, editarAlumno, registrarAviso,
 } from '@/lib/data';
 import { sedeNombre, MOTIVOS_DEVOLUCION, MOTIVOS_CAMBIO, AVISOS } from '@/lib/config';
 import { fmtFecha, normalizarTelefono, tallaTxt, waLink } from '@/lib/utils';
 import { construirMensaje, avisoSugerido } from '@/lib/mensajes';
 import { Alerta, Badge, Campo, Cargando, Modal } from '@/components/ui';
+import { FormRecepcion, useRecepcion, guardarLlegada } from '@/components/Recepcion';
 
 export default function DetallePedido() {
   const { id: rawId } = useParams();
@@ -57,7 +58,7 @@ export default function DetallePedido() {
         </div>
         {activo && (
           <div className="row noprint">
-            <button className="btn" onClick={() => setModal({ t: 'recepcion' })}>📥 Actualizar lo recibido</button>
+            <button className="btn" onClick={() => setModal({ t: 'recepcion' })}>{p.recibidoEn ? '📥 Actualizar lo recibido' : '📥 Registrar llegada a la sede'}</button>
             <button className="btn ok" onClick={() => setModal({ t: 'entrega' })}>✅ Entregar al alumno</button>
           </div>
         )}
@@ -153,7 +154,7 @@ export default function DetallePedido() {
         </div>
       </div>
 
-      {modal?.t === 'recepcion' && <RecepcionModal p={p} onClose={() => setModal(null)} onOk={(r, s, o) => ejecutar(() => registrarRecepcion(p.id, r, s, o), 'Llegada registrada')} />}
+      {modal?.t === 'recepcion' && <RecepcionModal p={p} onClose={() => setModal(null)} onOk={(r) => ejecutar(() => guardarLlegada(p, r), 'Llegada registrada')} />}
       {modal?.t === 'entrega' && <EntregaModal p={p} onClose={() => setModal(null)} onOk={(e, opt) => ejecutar(() => registrarEntrega(p.id, e, opt), 'Entrega registrada')} />}
       {modal?.t === 'stock' && <StockModal it={items[modal.idx]} onClose={() => setModal(null)} onOk={(c, m, n) => ejecutar(() => enviarAStock(p.id, modal.idx, c, m, n), 'Enviado a stock')} />}
       {modal?.t === 'cambio' && <CambioModal it={items[modal.idx]} articulos={articulos} sede={p.sede} onClose={() => setModal(null)} onOk={(d) => ejecutar(() => registrarCambio(p.id, modal.idx, d), 'Cambio registrado')} />}
@@ -169,29 +170,15 @@ function useEnviando() {
 }
 
 function RecepcionModal({ p, onClose, onOk }) {
-  const [rec, setRec] = useState(p.items.map((i) => (p.recibidoEn ? i.recibido || 0 : i.cantidad)));
-  const [sob, setSob] = useState(p.items.map(() => 0));
-  const [obs, setObs] = useState('');
+  const r = useRecepcion(p);
   const [b, run] = useEnviando();
-  const completo = p.items.every((it, i) => Number(rec[i]) >= it.cantidad);
   return (
-    <Modal titulo="Actualizar lo recibido" onClose={onClose} footer={<>
+    <Modal titulo={p.recibidoEn ? 'Actualizar lo recibido' : 'Registrar llegada a la sede'} onClose={onClose} footer={<>
       <button className="btn sec" onClick={onClose}>Cancelar</button>
-      <button className="btn" disabled={b} onClick={() => run(() => onOk(rec, sob, obs))}>Guardar</button>
+      <button className="btn" disabled={b} onClick={() => run(() => onOk(r))}>Guardar</button>
     </>}>
-      <p className="muted">Úsalo cuando llegue lo que faltaba o para corregir cantidades. Indica el total recibido de cada artículo. Si llegó de más (repetido), ponlo en “Sobrante” y pasará al stock.</p>
-      <div className="tablewrap"><table>
-        <thead><tr><th>Artículo</th><th>Pedido</th><th>Llegó</th><th>Sobrante → stock</th></tr></thead>
-        <tbody>{p.items.map((it, i) => (
-          <tr key={i}>
-            <td>{it.nombre} ({tallaTxt(it.talla)})</td><td>{it.cantidad}</td>
-            <td><input className="w80" type="number" min="0" value={rec[i]} onChange={(e) => setRec(rec.map((v, j) => (j === i ? e.target.value : v)))} /></td>
-            <td><input className="w80" type="number" min="0" value={sob[i]} onChange={(e) => setSob(sob.map((v, j) => (j === i ? e.target.value : v)))} /></td>
-          </tr>
-        ))}</tbody>
-      </table></div>
-      <div className={`alert ${completo ? 'ok' : 'error'}`} style={{ marginTop: 12 }}>{completo ? '✅ Llegó todo correctamente' : '⚠️ El pedido llegó incompleto'}</div>
-      <Campo label="Observación"><input value={obs} onChange={(e) => setObs(e.target.value)} placeholder="Ej: faltó la gorra, llega en el próximo envío" /></Campo>
+      <p className="muted">Indica el total recibido de cada artículo. Si llegó de más (repetido), ponlo en “Sobrante” y pasará al stock.</p>
+      <FormRecepcion p={p} r={r} />
     </Modal>
   );
 }

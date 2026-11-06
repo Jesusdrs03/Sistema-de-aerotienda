@@ -5,7 +5,7 @@ import { fmtFecha } from '@/lib/utils';
 import { Badge } from '@/components/ui';
 
 const PASOS = [
-  { k: 'registrado', t: 'Registrado' },
+  { k: 'registrado', t: 'Pedido realizado' },
   { k: 'recibido', t: 'Llegó a la sede' },
   { k: 'entregado', t: 'Entregado' },
 ];
@@ -72,7 +72,7 @@ export default function Consulta() {
               {PASOS.map((s, i) => <div key={s.k} className={i < p ? 'on' : ''}><i />{s.t}</div>)}
             </div>
             {res.estado === 'recibido_incompleto' && (
-              <div className="alert info">Tu pedido llegó, pero faltan algunos artículos. Te avisaremos cuando estén disponibles.</div>
+              <div className="alert info">Tu pedido llegó, pero faltan algunos artículos. Puedes retirar lo disponible; te avisaremos cuando llegue lo que falta.</div>
             )}
             <div className="tablewrap">
               <table>
@@ -89,7 +89,7 @@ export default function Consulta() {
               </table>
             </div>
             <p className="muted" style={{ marginBottom: 0 }}>
-              Registrado: {fmtFecha(res.creadoEn)}
+              Pedido realizado: {fmtFecha(res.creadoEn)}
               {res.recibidoEn && <> · Llegó: {fmtFecha(res.recibidoEn)}</>}
               {res.entregadoEn && <> · Entregado: {fmtFecha(res.entregadoEn)}</>}
             </p>
