@@ -50,7 +50,7 @@ export default function RecibirPedido() {
       {p === null && (
         <div className="card">
           <h2>El pedido {buscado} no está registrado</h2>
-          <p className="muted">Puede que no se haya registrado cuando el alumno lo hizo. Regístralo ahora como pedido ya recibido en la sede.</p>
+          <p className="muted">Puede que no se haya registrado cuando el alumno lo hizo. Regístralo ahora como pedido ya recibido en la sede: los datos del alumno y los artículos se traerán de la tienda en línea.</p>
           <div className="row">
             <button className="btn ok" onClick={() => router.push(`/admin/pedidos/nuevo?numero=${encodeURIComponent(buscado)}&llego=1`)}>➕ Registrar como pedido recibido</button>
             <button className="btn sec" onClick={() => { setP(undefined); input.current?.focus(); }}>Buscar otro número</button>

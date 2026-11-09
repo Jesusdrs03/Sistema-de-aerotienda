@@ -17,6 +17,7 @@ reasignaciones), sacar reportes y avisar al alumno por **WhatsApp**.
 | **Consulta pública** (`/`) | El alumno escribe su N° de pedido y ve si llegó y si se le entregó. Solo muestra datos no sensibles (nombre abreviado, artículos, estado). |
 | **Artículos** | Botón **Importar / actualizar desde la tienda**: carga los productos de la categoría Aerotienda de store.aeroidea.net con sus variantes (talla, color, género, modelo) y precio. También puedes crear o editar artículos a mano y activarlos o desactivarlos. |
 | **Nuevo pedido** | Dos opciones: **Pedido realizado** (el alumno lo hizo y aún no llega; queda con estado *Pedido realizado*) o **Pedido que ya llegó** (para los que llegan sin estar registrados; se indica cuánto llegó). Al guardar se abre WhatsApp con el aviso para el alumno. |
+| **Buscar en la tienda** | Al escribir el N° de pedido de store.aeroidea.net y pulsar **🔎 Buscar en la tienda**, se llenan solos los datos del alumno (nombre, cédula, teléfono, correo, curso), la sede y los artículos con su variante. Requiere las claves de la API de WooCommerce (ver instalación). |
 | **Recibir pedido** | Cuando llega un pedido, escribes su número: si ya estaba registrado aparece para confirmar lo que llegó y pasa a *En la sede*; si no existe, se registra ahí mismo como recibido. Se abre WhatsApp con el aviso (llegó / llegó incompleto). |
 | **Actualizar lo recibido** | Cuando llega lo que faltaba, o para corregir cantidades. Lo que llegue **repetido o de más** pasa directo al stock. |
 | **Entregar al alumno** | Entrega total o parcial. Opción "tomar del stock" para la **venta directa** cuando abras la aerotienda de Santa Mónica. |
@@ -63,6 +64,12 @@ Solo los usuarios creados así pueden entrar al panel; cualquier otra cuenta ve 
 No requiere configuración ni tiene costo. En la ficha de cada pedido hay botones (*Pedido llegó*, *Llegó incompleto*,
 *Recordatorio de retiro*, *Confirmar entrega*) que abren WhatsApp con el mensaje ya escrito para el teléfono del alumno;
 solo hay que darle a enviar. Cada aviso queda anotado en el pedido.
+
+### 3b. Conexión con la tienda (datos del alumno por N° de pedido)
+1. Entra a `store.aeroidea.net/wp-admin` → **WooCommerce → Ajustes → Avanzado → API REST → Añadir clave**.
+2. Descripción: `Sistema Aerotienda`; Usuario: tu usuario administrador; **Permisos: Lectura**. Clic en **Generar clave de API**.
+3. Copia la **Clave del cliente** (`ck_…`) y la **Clave secreta del cliente** (`cs_…`); solo se muestran una vez.
+4. En Vercel → Settings → Environment Variables agrega `WC_CONSUMER_KEY` y `WC_CONSUMER_SECRET` con esos valores y vuelve a desplegar.
 
 ### 4. Desplegar en Vercel
 1. Sube esta carpeta a un repositorio de GitHub.

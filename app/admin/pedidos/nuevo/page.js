@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { listarArticulos, crearPedido, registrarAviso } from '@/lib/data';
+import { listarArticulos, crearPedido, registrarAviso, buscarPedidoTienda } from '@/lib/data';
+import { elegirVariante } from '@/lib/tiendaPedido';
 import { SEDES } from '@/lib/config';
 import { construirMensaje, avisoSugerido } from '@/lib/mensajes';
-import { waLink } from '@/lib/utils';
+import { waLink, slug, fmtFecha } from '@/lib/utils';
 import { useAdmin } from '@/components/AdminContext';
 import { Alerta, Campo, Cargando } from '@/components/ui';
 
@@ -25,15 +26,54 @@ export default function NuevoPedido() {
   const [modo, setModo] = useState('realizado'); // 'realizado' = el alumno lo pidió; 'llego' = ya está en la sede
   const llegoYa = modo === 'llego';
 
+  const [msg, setMsg] = useState(null);
+  const [guardando, setGuardando] = useState(false);
+  const [tienda, setTienda] = useState(null); // resultado de la búsqueda en la tienda
+  const [buscando, setBuscando] = useState(false);
+
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     if (q.get('llego')) setModo('llego');
-    if (q.get('numero')) setF((x) => ({ ...x, numero: q.get('numero') }));
+    listarArticulos().then((l) => {
+      const activos = l.filter((a) => a.activo !== false);
+      setArticulos(activos);
+      // Si viene de "Recibir pedido" con un número, se traen los datos de la tienda automáticamente
+      if (q.get('numero')) { setF((x) => ({ ...x, numero: q.get('numero') })); traerDeTienda(q.get('numero'), activos, true); }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [msg, setMsg] = useState(null);
-  const [guardando, setGuardando] = useState(false);
 
-  useEffect(() => { listarArticulos().then((l) => setArticulos(l.filter((a) => a.activo !== false))); }, []);
+  async function traerDeTienda(numero = f.numero, arts = articulos, silencioso = false) {
+    if (!String(numero).trim()) return setMsg({ type: 'error', text: 'Escribe el número de pedido de la tienda' });
+    setBuscando(true); setMsg(null);
+    try {
+      const t = await buscarPedidoTienda(numero);
+      const lineas = []; const avisos = [];
+      for (const it of t.items) {
+        const a = arts.find((x) => x.tiendaId && x.tiendaId === it.tiendaId) || arts.find((x) => slug(x.nombre) === slug(it.nombre.split(' - ')[0]));
+        if (!a) { avisos.push(`“${it.nombre}” no está en el catálogo: impórtalo en Artículos o agrégalo a mano.`); continue; }
+        const talla = a.tallas?.length ? elegirVariante(a.tallas, it.variante) : '';
+        if (a.tallas?.length && !talla) avisos.push(`Elige la variante de ${a.nombre} (en la tienda: ${it.variante || 'sin variante'}).`);
+        lineas.push({ articuloId: a.id, talla, cantidad: it.cantidad, recibido: '' });
+      }
+      setF((x) => ({
+        ...x,
+        numero: t.numero || x.numero,
+        sede: t.sede || x.sede,
+        notas: x.notas || t.notas || '',
+        alumno: Object.fromEntries(Object.entries(x.alumno).map(([k, v]) => [k, t.alumno[k] || v])),
+      }));
+      if (lineas.length) setItems(lineas);
+      if (!t.alumno.cedula) avisos.push('La tienda no trae la cédula del alumno: escríbela a mano.');
+      if (t.sedeTexto && !t.sede) avisos.push(`Sede indicada en la tienda: “${t.sedeTexto}”. Selecciona la sede correcta.`);
+      setTienda({ ...t, avisos });
+    } catch (e) {
+      setTienda(null);
+      if (!silencioso || !/no está configurada|No se encontró/.test(e.message)) setMsg({ type: 'error', text: e.message });
+      else setMsg({ type: 'info', text: e.message });
+    }
+    setBuscando(false);
+  }
 
   const setA = (k) => (e) => setF({ ...f, alumno: { ...f.alumno, [k]: e.target.value } });
   const setItem = (i, k, v) => setItems(items.map((it, j) => (j === i ? { ...it, [k]: v, ...(k === 'articuloId' ? { talla: '' } : {}) } : it)));
@@ -104,7 +144,13 @@ export default function NuevoPedido() {
       <div className="card">
         <h2>Datos del pedido</h2>
         <div className="grid">
-          <Campo label="N° de pedido (vacío = automático)"><input value={f.numero} onChange={(e) => setF({ ...f, numero: e.target.value })} placeholder="Número que trae el pedido" /></Campo>
+          <Campo label="N° de pedido (vacío = automático)">
+            <div className="row" style={{ flexWrap: 'nowrap' }}>
+              <input value={f.numero} onChange={(e) => setF({ ...f, numero: e.target.value })} placeholder="Número que trae el pedido"
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); traerDeTienda(); } }} />
+              <button type="button" className="btn sec" disabled={buscando} onClick={() => traerDeTienda()}>{buscando ? 'Buscando…' : '🔎 Buscar en la tienda'}</button>
+            </div>
+          </Campo>
           <Campo label="Enviado desde">
             <select value={f.origen} onChange={(e) => setF({ ...f, origen: e.target.value })}>{SEDES.map((s) => <option key={s.id} value={s.id}>{s.nombre}</option>)}</select>
           </Campo>
@@ -113,6 +159,18 @@ export default function NuevoPedido() {
           </Campo>
         </div>
       </div>
+
+      {tienda && (
+        <div className="alert ok">
+          <b>✅ Datos traídos de la tienda — pedido #{tienda.numero}</b>
+          <div className="muted" style={{ color: 'inherit' }}>
+            Estado en la tienda: {tienda.estadoTienda} · Fecha: {fmtFecha(tienda.fecha, false)} · Total: {tienda.total} {tienda.moneda}
+            {tienda.sedeTexto && <> · Sede: {tienda.sedeTexto}</>}
+          </div>
+          {tienda.avisos.length > 0 && <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>{tienda.avisos.map((a, i) => <li key={i}>⚠️ {a}</li>)}</ul>}
+          <div className="muted" style={{ color: 'inherit', marginTop: 6 }}>Revisa los datos antes de guardar.</div>
+        </div>
+      )}
 
       <div className="card">
         <h2>Datos del alumno</h2>
