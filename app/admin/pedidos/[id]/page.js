@@ -33,6 +33,20 @@ export default function DetallePedido() {
     catch (e) { setMsg({ type: 'error', text: e.message }); setModal(null); }
   }
 
+  // Registra la entrega y, si se pidió, abre WhatsApp con la confirmación (la ventana se abre antes de esperar)
+  async function entregarYAvisar(entregas, opt, conAviso) {
+    const tel = p.alumno?.telefono;
+    const ventana = conAviso && tel ? window.open('about:blank', '_blank') : null;
+    try {
+      await registrarEntrega(p.id, entregas, opt);
+      if (ventana) {
+        const nuevo = await obtenerPedido(p.id);
+        ventana.location.href = waLink(tel, construirMensaje('entrega', nuevo, window.location.origin));
+        await registrarAviso(p.id, 'entrega').catch(() => {});
+      }
+    } catch (e) { if (ventana) ventana.close(); throw e; }
+  }
+
   async function avisar(tipo) {
     await registrarAviso(p.id, tipo).catch(() => {});
     cargar();
@@ -59,7 +73,7 @@ export default function DetallePedido() {
         {activo && (
           <div className="row noprint">
             <button className="btn" onClick={() => setModal({ t: 'recepcion' })}>{p.recibidoEn ? '📥 Actualizar lo recibido' : '📥 Registrar llegada a la sede'}</button>
-            <button className="btn ok" onClick={() => setModal({ t: 'entrega' })}>✅ Entregar al alumno</button>
+            {p.estado !== 'entregado' && <button className="btn ok" onClick={() => setModal({ t: 'entrega' })}>✅ Entregar al alumno</button>}
           </div>
         )}
       </div>
@@ -121,6 +135,7 @@ export default function DetallePedido() {
                     <td className="noprint">
                       {activo && (
                         <div className="row">
+                          {it.cantidad > (it.entregado || 0) && <button className="btn ok sm" onClick={() => setModal({ t: 'entrega', idx: i })}>✅ Entregar</button>}
                           <button className="btn sec sm" onClick={() => setModal({ t: 'stock', idx: i })}>↩ A stock</button>
                           {it.cantidad > 0 && <button className="btn sec sm" onClick={() => setModal({ t: 'cambio', idx: i })}>🔄 Cambio</button>}
                         </div>
@@ -155,7 +170,7 @@ export default function DetallePedido() {
       </div>
 
       {modal?.t === 'recepcion' && <RecepcionModal p={p} onClose={() => setModal(null)} onOk={(r) => ejecutar(() => guardarLlegada(p, r), 'Llegada registrada')} />}
-      {modal?.t === 'entrega' && <EntregaModal p={p} onClose={() => setModal(null)} onOk={(e, opt) => ejecutar(() => registrarEntrega(p.id, e, opt), 'Entrega registrada')} />}
+      {modal?.t === 'entrega' && <EntregaModal p={p} soloIdx={modal.idx} onClose={() => setModal(null)} onOk={(e, opt, av) => ejecutar(() => entregarYAvisar(e, opt, av), 'Entrega registrada')} />}
       {modal?.t === 'stock' && <StockModal it={items[modal.idx]} onClose={() => setModal(null)} onOk={(c, m, n) => ejecutar(() => enviarAStock(p.id, modal.idx, c, m, n), 'Enviado a stock')} />}
       {modal?.t === 'cambio' && <CambioModal it={items[modal.idx]} articulos={articulos} sede={p.sede} onClose={() => setModal(null)} onOk={(d) => ejecutar(() => registrarCambio(p.id, modal.idx, d), 'Cambio registrado')} />}
       {modal?.t === 'alumno' && <AlumnoModal alumno={p.alumno} onClose={() => setModal(null)} onOk={(a) => ejecutar(() => editarAlumno(p.id, a), 'Datos actualizados')} />}
@@ -183,30 +198,52 @@ function RecepcionModal({ p, onClose, onOk }) {
   );
 }
 
-function EntregaModal({ p, onClose, onOk }) {
-  const [ent, setEnt] = useState(p.items.map((i) => Math.max(0, i.cantidad - (i.entregado || 0))));
+function EntregaModal({ p, soloIdx, onClose, onOk }) {
+  const pend = (it) => Math.max(0, it.cantidad - (it.entregado || 0));
+  const lineas = p.items.map((it, i) => ({ it, i })).filter(({ it }) => it.cantidad > 0);
+  const [marcado, setMarcado] = useState(p.items.map((it, i) => pend(it) > 0 && (soloIdx == null || soloIdx === i)));
+  const [cant, setCant] = useState(p.items.map((it) => pend(it)));
   const [desdeStock, setDesdeStock] = useState(!p.recibidoEn && p.origen === p.sede);
   const [obs, setObs] = useState('');
+  const [avisar, setAvisar] = useState(!!p.alumno?.telefono);
   const [b, run] = useEnviando();
+  const pendientes = lineas.filter(({ it }) => pend(it) > 0);
+  const todos = pendientes.length > 0 && pendientes.every(({ i }) => marcado[i]);
+  const entregas = p.items.map((it, i) => (marcado[i] ? Math.min(Number(cant[i]) || 0, pend(it)) : 0));
+  const total = entregas.reduce((a, n) => a + n, 0);
   return (
     <Modal titulo="Entregar al alumno" onClose={onClose} footer={<>
       <button className="btn sec" onClick={onClose}>Cancelar</button>
-      <button className="btn ok" disabled={b} onClick={() => run(() => onOk(ent, { desdeStock, observacion: obs }))}>Registrar entrega</button>
+      <button className="btn ok" disabled={b || !total} onClick={() => run(() => onOk(entregas, { desdeStock, observacion: obs }, avisar))}>
+        Registrar entrega{total ? ` (${total})` : ''}
+      </button>
     </>}>
+      <p className="muted" style={{ marginTop: -4 }}>Marca los artículos que se le entregan al alumno ahora.</p>
       <div className="tablewrap"><table>
-        <thead><tr><th>Artículo</th><th>Pedido</th><th>Ya entregado</th><th>Entregar ahora</th></tr></thead>
-        <tbody>{p.items.filter((it) => it.cantidad > 0).map((it) => {
-          const i = p.items.indexOf(it);
+        <thead><tr>
+          <th style={{ width: 40 }}><input type="checkbox" title="Marcar todos" checked={todos} disabled={!pendientes.length}
+            onChange={(e) => setMarcado(p.items.map((it) => e.target.checked && pend(it) > 0))} /></th>
+          <th>Artículo</th><th>Pedido</th><th>Ya entregado</th><th>Cantidad a entregar</th>
+        </tr></thead>
+        <tbody>{lineas.map(({ it, i }) => {
+          const falta = pend(it);
           return (
-            <tr key={i}>
-              <td>{it.nombre} ({tallaTxt(it.talla)})</td><td>{it.cantidad}</td><td>{it.entregado || 0}</td>
-              <td><input className="w80" type="number" min="0" max={it.cantidad - (it.entregado || 0)} value={ent[i]} onChange={(e) => setEnt(ent.map((v, j) => (j === i ? e.target.value : v)))} /></td>
+            <tr key={i} style={{ opacity: falta ? 1 : 0.55, cursor: falta ? 'pointer' : 'default' }}
+              onClick={(e) => { if (falta && e.target.tagName !== 'INPUT') setMarcado(marcado.map((v, j) => (j === i ? !v : v))); }}>
+              <td>{falta ? <input type="checkbox" checked={marcado[i]} onChange={(e) => setMarcado(marcado.map((v, j) => (j === i ? e.target.checked : v)))} /> : '✅'}</td>
+              <td><b>{it.nombre}</b> <span className="muted">({tallaTxt(it.talla)})</span></td>
+              <td>{it.cantidad}</td>
+              <td>{it.entregado || 0}{!falta && <span className="badge green" style={{ marginLeft: 6 }}>Completo</span>}</td>
+              <td>{falta > 1
+                ? <input className="w80" type="number" min="1" max={falta} value={cant[i]} disabled={!marcado[i]} onChange={(e) => setCant(cant.map((v, j) => (j === i ? e.target.value : v)))} />
+                : falta === 1 ? <span className="muted">1</span> : '—'}</td>
             </tr>
           );
         })}</tbody>
       </table></div>
       <div style={{ height: 12 }} />
       <label className="chk"><input type="checkbox" checked={desdeStock} onChange={(e) => setDesdeStock(e.target.checked)} /> Tomar del stock de {sedeNombre(p.sede)} (venta directa en tienda o reposición de faltantes)</label>
+      {p.alumno?.telefono && <label className="chk" style={{ marginTop: 8 }}><input type="checkbox" checked={avisar} onChange={(e) => setAvisar(e.target.checked)} /> Abrir WhatsApp para confirmarle la entrega al alumno</label>}
       <div style={{ height: 10 }} />
       <Campo label="Observación"><input value={obs} onChange={(e) => setObs(e.target.value)} placeholder="Ej: retiró su representante" /></Campo>
     </Modal>

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { listarArticulos, crearPedido, registrarAviso, buscarPedidoTienda } from '@/lib/data';
+import { listarArticulos, crearPedido, registrarAviso, buscarPedidoTienda, registrarEntrega, obtenerPedido } from '@/lib/data';
 import { elegirVariante } from '@/lib/tiendaPedido';
 import { SEDES } from '@/lib/config';
 import { construirMensaje, avisoSugerido } from '@/lib/mensajes';
@@ -10,7 +10,7 @@ import { useAdmin } from '@/components/AdminContext';
 import { Alerta, Campo, Cargando } from '@/components/ui';
 
 const CATS = (arts) => Object.entries(arts.reduce((m, a) => ((m[a.categoria || 'Otros'] ||= []).push(a), m), {})).sort(([a], [b]) => a.localeCompare(b));
-const linea = () => ({ articuloId: '', talla: '', cantidad: 1, recibido: '' });
+const linea = () => ({ articuloId: '', talla: '', cantidad: 1, recibido: '', entregar: false });
 
 export default function NuevoPedido() {
   const router = useRouter();
@@ -54,7 +54,7 @@ export default function NuevoPedido() {
         if (!a) { avisos.push(`“${it.nombre}” no está en el catálogo: impórtalo en Artículos o agrégalo a mano.`); continue; }
         const talla = a.tallas?.length ? elegirVariante(a.tallas, it.variante) : '';
         if (a.tallas?.length && !talla) avisos.push(`Elige la variante de ${a.nombre} (en la tienda: ${it.variante || 'sin variante'}).`);
-        lineas.push({ articuloId: a.id, talla, cantidad: it.cantidad, recibido: '' });
+        lineas.push({ articuloId: a.id, talla, cantidad: it.cantidad, recibido: '', entregar: false });
       }
       setF((x) => ({
         ...x,
@@ -105,8 +105,11 @@ export default function NuevoPedido() {
         }),
       };
       const id = await crearPedido(data);
+      // Artículos que el alumno se lleva en el momento del registro
+      const entregas = llegoYa ? validos.map((i) => (i.entregar ? Math.min(llego(i), Number(i.cantidad)) : 0)) : [];
+      if (entregas.some((n) => n > 0)) await registrarEntrega(id, entregas, { observacion: 'Entregado al registrar el pedido' });
       if (ventana) {
-        const p = { ...data, numero: id, recibidoEn: llegoYa ? new Date() : null };
+        const p = (await obtenerPedido(id)) || { ...data, numero: id, recibidoEn: llegoYa ? new Date() : null };
         const tipo = avisoSugerido(p);
         ventana.location.href = waLink(f.alumno.telefono, construirMensaje(tipo, p, window.location.origin));
         await registrarAviso(id, tipo).catch(() => {});
@@ -187,7 +190,14 @@ export default function NuevoPedido() {
         <h2>Artículos</h2>
         <div className="tablewrap">
           <table>
-            <thead><tr><th>Artículo</th><th>Talla / variante</th><th>Cantidad</th>{llegoYa && <th>Llegó</th>}<th></th></tr></thead>
+            <thead><tr><th>Artículo</th><th>Talla / variante</th><th>Cantidad</th>{llegoYa && <th>Llegó</th>}{llegoYa && (
+              <th title="Marca lo que el alumno se lleva ahora">
+                <label className="chk" style={{ fontSize: 'inherit', color: 'inherit' }}>
+                  <input type="checkbox" checked={validos.length > 0 && validos.every((i) => i.entregar)}
+                    onChange={(e) => setItems(items.map((it) => ({ ...it, entregar: e.target.checked && !!it.articuloId && llego(it) > 0 })))} />
+                  Entregado
+                </label>
+              </th>)}<th></th></tr></thead>
             <tbody>
               {items.map((it, i) => {
                 const a = articulos.find((x) => x.id === it.articuloId);
@@ -213,6 +223,12 @@ export default function NuevoPedido() {
                       <td>
                         <input className="w80" type="number" min="0" value={it.recibido === '' ? it.cantidad : it.recibido} onChange={(e) => setItem(i, 'recibido', e.target.value)} />
                         {falta && <div><span className="badge orange">Faltan {Number(it.cantidad) - llego(it)}</span></div>}
+                      </td>
+                    )}
+                    {llegoYa && (
+                      <td>
+                        <label className="chk"><input type="checkbox" checked={!!it.entregar} disabled={!it.articuloId || llego(it) === 0}
+                          onChange={(e) => setItem(i, 'entregar', e.target.checked)} /> {it.entregar ? '✅' : ''}</label>
                       </td>
                     )}
                     <td>{items.length > 1 && <button type="button" className="btn danger sm" onClick={() => setItems(items.filter((_, j) => j !== i))}>Quitar</button>}</td>
