@@ -6,6 +6,7 @@ import { buscarPedidoPorNumero } from '@/lib/data';
 import { sedeNombre } from '@/lib/config';
 import { fmtFecha } from '@/lib/utils';
 import { Alerta, Badge } from '@/components/ui';
+import EscanerNumero from '@/components/EscanerNumero';
 import { FormRecepcion, useRecepcion, guardarLlegada } from '@/components/Recepcion';
 
 export default function RecibirPedido() {
@@ -19,9 +20,9 @@ export default function RecibirPedido() {
 
   useEffect(() => { input.current?.focus(); }, []);
 
-  async function buscar(e) {
-    e?.preventDefault();
-    const n = numero.trim();
+  async function buscar(e, directo) {
+    e?.preventDefault?.();
+    const n = String(directo ?? numero).trim();
     if (!n) return;
     setCargando(true); setMsg(null);
     try { setP(await buscarPedidoPorNumero(n)); setBuscado(n.toUpperCase()); }
@@ -38,12 +39,13 @@ export default function RecibirPedido() {
   return (
     <>
       <h1>📥 Recibir pedido en la sede</h1>
-      <p className="muted" style={{ marginTop: -8 }}>Escribe el número del pedido que llegó. Si ya estaba registrado, confirma lo que llegó; si no, puedes registrarlo directamente como recibido.</p>
+      <p className="muted" style={{ marginTop: -8 }}>Escribe o escanea con la cámara el número del pedido que llegó. Si ya estaba registrado, confirma lo que llegó; si no, puedes registrarlo directamente como recibido.</p>
       <Alerta msg={msg} onClose={() => setMsg(null)} />
 
       <form className="card row" onSubmit={buscar}>
         <input ref={input} style={{ flex: 1, minWidth: 220, fontSize: '1.1rem' }} placeholder="N° de pedido"
           value={numero} onChange={(e) => setNumero(e.target.value)} />
+        <EscanerNumero titulo="Escanear número de pedido" onDetectado={(v) => { setNumero(v); buscar(null, v); }} />
         <button className="btn" disabled={cargando}>{cargando ? 'Buscando…' : 'Buscar'}</button>
       </form>
 

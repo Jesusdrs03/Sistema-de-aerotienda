@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { APP_NAME } from '@/lib/config';
 import { fmtFecha } from '@/lib/utils';
 import { Badge } from '@/components/ui';
+import EscanerNumero from '@/components/EscanerNumero';
 
 const PASOS = [
   { k: 'registrado', t: 'Pedido realizado' },
@@ -45,7 +46,7 @@ export default function Consulta() {
   return (
     <>
       <div className="hero">
-        <div style={{ fontSize: 40 }}>✈️</div>
+        <div style={{ fontSize: 36 }}>✈️</div>
         <h1>{APP_NAME}</h1>
         <p style={{ opacity: .85, margin: 0 }}>Consulta el estado de tu pedido con tu número de pedido</p>
       </div>
@@ -54,6 +55,7 @@ export default function Consulta() {
           <form className="row" onSubmit={(e) => { e.preventDefault(); buscar(); }}>
             <input style={{ flex: 1, minWidth: 200, fontSize: '1.05rem' }} placeholder="Ej: BQTO-2026-0012"
               value={numero} onChange={(e) => setNumero(e.target.value)} />
+            <EscanerNumero onDetectado={(v) => { setNumero(v); buscar(v); }} titulo="Escanear mi número de pedido" />
             <button className="btn" disabled={cargando}>{cargando ? 'Buscando…' : 'Consultar'}</button>
           </form>
           {error && <div className="alert error" style={{ marginTop: 14, marginBottom: 0 }}>{error}</div>}
