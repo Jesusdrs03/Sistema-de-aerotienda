@@ -5,6 +5,8 @@ export const metadata = {
   description: 'Gestión de pedidos, entregas y stock de la Aerotienda',
 };
 
+export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#ffffff' };
+
 export default function RootLayout({ children }) {
   return (
     <html lang="es">

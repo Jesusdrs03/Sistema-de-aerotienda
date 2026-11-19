@@ -8,6 +8,7 @@ import { construirMensaje, avisoSugerido } from '@/lib/mensajes';
 import { waLink, slug, fmtFecha } from '@/lib/utils';
 import { useAdmin } from '@/components/AdminContext';
 import { Alerta, Campo, Cargando } from '@/components/ui';
+import EscanerNumero from '@/components/EscanerNumero';
 
 const CATS = (arts) => Object.entries(arts.reduce((m, a) => ((m[a.categoria || 'Otros'] ||= []).push(a), m), {})).sort(([a], [b]) => a.localeCompare(b));
 const linea = () => ({ articuloId: '', talla: '', cantidad: 1, recibido: '', entregar: false });
@@ -151,6 +152,7 @@ export default function NuevoPedido() {
             <div className="row" style={{ flexWrap: 'nowrap' }}>
               <input value={f.numero} onChange={(e) => setF({ ...f, numero: e.target.value })} placeholder="Número que trae el pedido"
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); traerDeTienda(); } }} />
+              <EscanerNumero titulo="Escanear número de pedido" onDetectado={(v) => { setF((x) => ({ ...x, numero: v })); traerDeTienda(v); }} />
               <button type="button" className="btn sec" disabled={buscando} onClick={() => traerDeTienda()}>{buscando ? 'Buscando…' : '🔎 Buscar en la tienda'}</button>
             </div>
           </Campo>

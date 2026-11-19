@@ -6,6 +6,7 @@ import { listarPedidos, buscarPedidoPorNumero } from '@/lib/data';
 import { SEDES, ESTADOS, sedeNombre } from '@/lib/config';
 import { fmtFecha } from '@/lib/utils';
 import { Alerta, Badge, Cargando } from '@/components/ui';
+import EscanerNumero from '@/components/EscanerNumero';
 
 export default function Pedidos() {
   const router = useRouter();
@@ -39,6 +40,7 @@ export default function Pedidos() {
       <Alerta msg={msg} onClose={() => setMsg(null)} />
       <form className="card row" onSubmit={irNumero}>
         <input style={{ flex: 2, minWidth: 220 }} placeholder="Buscar por N° de pedido, nombre, cédula o teléfono (Enter abre el pedido)" value={q} onChange={(e) => setQ(e.target.value)} />
+        <EscanerNumero titulo="Escanear número de pedido" onDetectado={(v) => setQ(v)} />
         <select style={{ flex: 1, minWidth: 150 }} value={estado} onChange={(e) => setEstado(e.target.value)}>
           <option value="">Todos los estados</option>
           {Object.entries(ESTADOS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
