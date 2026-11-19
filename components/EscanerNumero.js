@@ -16,31 +16,86 @@ function cargarTesseract() {
   });
 }
 
-/** Saca del texto leído los posibles números de pedido (ej: BQTO-2026-0012, 48213, #48213) */
+/** Cantidad de dígitos que tiene normalmente un número de pedido */
+const DIGITOS = 6;
+
+/** Saca del texto leído los posibles números de pedido. Los de 6 dígitos van primero. */
 export function extraerCandidatos(texto) {
   const limpio = String(texto || '').toUpperCase().replace(/[\u2010-\u2015]/g, '-');
-  const hallados = new Set();
+  // Errores típicos del OCR al confundir letras con números
+  const corregido = limpio.replace(/[OQD]/g, '0').replace(/[IL|]/g, '1').replace(/S/g, '5').replace(/B/g, '8').replace(/Z/g, '2');
+  const exactos = new Set();
+  const otros = new Set();
+  for (const t of [limpio, corregido]) {
+    // Quita espacios entre dígitos ("123 456" -> "123456")
+    const junto = t.replace(/(\d)[\s.,-]+(?=\d)/g, '$1');
+    (junto.match(/\d+/g) || []).forEach((m) => {
+      if (m.length === DIGITOS) exactos.add(m);
+      else if (m.length > DIGITOS) {
+        // Si hay dígitos de más, ofrece las ventanas de 6 dígitos
+        for (let i = 0; i + DIGITOS <= m.length; i++) exactos.add(m.slice(i, i + DIGITOS));
+      } else if (m.length >= 4) otros.add(m);
+    });
+  }
   // Formato con letras y guiones, ej: BQTO-2026-0012
-  (limpio.match(/[A-Z]{2,6}(?:-[A-Z0-9]{2,8}){1,3}/g) || []).forEach((m) => hallados.add(m));
-  // Números de 3 o más dígitos (con # opcional)
-  (limpio.match(/#?\d{3,}/g) || []).forEach((m) => hallados.add(m.replace('#', '')));
-  return [...hallados].slice(0, 6);
+  (limpio.match(/[A-Z]{2,6}(?:-[A-Z0-9]{2,8}){1,3}/g) || []).forEach((m) => otros.add(m));
+  return [...exactos, ...otros].slice(0, 6);
 }
 
-/** Aumenta el contraste y pasa a blanco y negro para que el OCR lea mejor */
-function prepararImagen(canvas) {
+/** Pasa a grises y estira el contraste (sin volver la imagen blanco y negro) */
+function aGrisesContraste(canvas) {
   const ctx = canvas.getContext('2d');
   const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const d = img.data;
-  let suma = 0;
-  for (let i = 0; i < d.length; i += 4) suma += d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114;
-  const umbral = suma / (d.length / 4);
+  let min = 255; let max = 0;
   for (let i = 0; i < d.length; i += 4) {
     const g = d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114;
-    const v = g > umbral * 0.95 ? 255 : 0;
+    d[i] = d[i + 1] = d[i + 2] = g;
+    if (g < min) min = g;
+    if (g > max) max = g;
+  }
+  const rango = Math.max(1, max - min);
+  for (let i = 0; i < d.length; i += 4) {
+    const v = ((d[i] - min) * 255) / rango;
     d[i] = d[i + 1] = d[i + 2] = v;
   }
   ctx.putImageData(img, 0, 0);
+}
+
+/** Blanco y negro con umbral de Otsu (separa mejor la tinta del papel que un promedio) */
+function binarizarOtsu(canvas) {
+  const ctx = canvas.getContext('2d');
+  const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = img.data;
+  const hist = new Array(256).fill(0);
+  for (let i = 0; i < d.length; i += 4) hist[Math.round(d[i])]++;
+  const total = d.length / 4;
+  let suma = 0;
+  for (let t = 0; t < 256; t++) suma += t * hist[t];
+  let sumaB = 0; let wB = 0; let mejor = 0; let umbral = 128;
+  for (let t = 0; t < 256; t++) {
+    wB += hist[t];
+    if (!wB) continue;
+    const wF = total - wB;
+    if (!wF) break;
+    sumaB += t * hist[t];
+    const mB = sumaB / wB;
+    const mF = (suma - sumaB) / wF;
+    const varEntre = wB * wF * (mB - mF) * (mB - mF);
+    if (varEntre > mejor) { mejor = varEntre; umbral = t; }
+  }
+  for (let i = 0; i < d.length; i += 4) {
+    const v = d[i] > umbral ? 255 : 0;
+    d[i] = d[i + 1] = d[i + 2] = v;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+function copiar(canvas) {
+  const c = document.createElement('canvas');
+  c.width = canvas.width; c.height = canvas.height;
+  c.getContext('2d').drawImage(canvas, 0, 0);
+  return c;
 }
 
 /**
@@ -78,6 +133,7 @@ function Visor({ titulo, onCerrar, onUsar }) {
   const [candidatos, setCandidatos] = useState([]);
   const [manual, setManual] = useState('');
   const [aviso, setAviso] = useState('');
+  const [vista, setVista] = useState('');
 
   const detener = useCallback(() => {
     activo.current = false;
@@ -136,32 +192,50 @@ function Visor({ titulo, onCerrar, onUsar }) {
   async function leerTexto() {
     const v = video.current;
     if (!v?.videoWidth) return;
-    setLeyendo(true); setAviso(''); setCandidatos([]);
+    setLeyendo(true); setAviso(''); setCandidatos([]); setVista('');
     try {
-      // Recorta la franja central (donde está el marco guía)
+      // Recorta la franja central (donde está el marco guía) y la agranda para que el OCR lea mejor
       const w = v.videoWidth;
       const h = v.videoHeight;
       const cw = Math.round(w * 0.86);
-      const ch = Math.round(h * 0.28);
-      const canvas = document.createElement('canvas');
-      canvas.width = cw; canvas.height = ch;
-      canvas.getContext('2d').drawImage(v, Math.round((w - cw) / 2), Math.round((h - ch) / 2), cw, ch, 0, 0, cw, ch);
-      prepararImagen(canvas);
+      const ch = Math.round(h * 0.34);
+      const base = document.createElement('canvas');
+      const escala = Math.min(2, 1600 / cw);
+      base.width = Math.round(cw * escala); base.height = Math.round(ch * escala);
+      base.getContext('2d').drawImage(v, Math.round((w - cw) / 2), Math.round((h - ch) / 2), cw, ch, 0, 0, base.width, base.height);
+      aGrisesContraste(base);
+      const bn = copiar(base);
+      binarizarOtsu(bn);
+      setVista(bn.toDataURL('image/png')); // para que veas qué analizó
 
       const T = await cargarTesseract();
       const worker = await T.createWorker('eng');
+      const votos = new Map(); // número -> veces que lo vio
       try {
-        await worker.setParameters({
-          tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-#',
-          tessedit_pageseg_mode: '7', // una sola línea de texto
-        });
-        var { data } = await worker.recognize(canvas);
+        const pasadas = [
+          { img: base, psm: '7' }, // una línea, en grises
+          { img: bn, psm: '7' },   // una línea, blanco y negro
+          { img: base, psm: '6' }, // bloque de texto
+          { img: bn, psm: '8' },   // una palabra
+        ];
+        for (const { img, psm } of pasadas) {
+          await worker.setParameters({
+            tessedit_char_whitelist: '0123456789',
+            tessedit_pageseg_mode: psm,
+            classify_bln_numeric_mode: '1',
+          });
+          const { data } = await worker.recognize(img);
+          extraerCandidatos(data?.text).forEach((c) => votos.set(c, (votos.get(c) || 0) + 1));
+        }
       } finally {
         await worker.terminate().catch(() => {});
       }
-      const lista = extraerCandidatos(data?.text);
+      // Primero los de 6 dígitos y los que más se repitieron
+      const lista = [...votos.entries()]
+        .sort((x, y) => (Number(y[0].length === DIGITOS) - Number(x[0].length === DIGITOS)) || (y[1] - x[1]))
+        .map(([c]) => c).slice(0, 6);
       setCandidatos(lista);
-      if (!lista.length) setAviso('No se detectó ningún número. Acerca la cámara, mejora la luz y vuelve a intentar.');
+      if (!lista.length) setAviso('No se detectó ningún número. Acerca la cámara hasta que los dígitos llenen el marco, con buena luz y sin reflejos, y vuelve a intentar. Si es letra a mano, escríbelo abajo.');
     } catch (e) {
       setAviso(e.message || 'No se pudo leer el número.');
     }
@@ -193,7 +267,7 @@ function Visor({ titulo, onCerrar, onUsar }) {
           </div>
         )}
 
-        {!error && <p className="muted" style={{ textAlign: 'center', margin: '10px 0' }}>Centra el número dentro del marco y pulsa <b>Leer número</b>. Los códigos de barras o QR se leen solos.</p>}
+        {!error && <p className="muted" style={{ textAlign: 'center', margin: '10px 0' }}>Acerca la cámara hasta que los <b>6 dígitos llenen el marco</b>, con buena luz, y pulsa <b>Leer número</b>. Los códigos de barras o QR se leen solos.</p>}
 
         {!error && (
           <button type="button" className="btn" style={{ width: '100%', justifyContent: 'center' }} disabled={!listo || leyendo} onClick={leerTexto}>
@@ -202,6 +276,13 @@ function Visor({ titulo, onCerrar, onUsar }) {
         )}
 
         {aviso && <div className="alert info" style={{ marginTop: 12 }}>{aviso}</div>}
+
+        {vista && (
+          <div style={{ marginTop: 12 }}>
+            <label>Imagen que se analizó</label>
+            <img src={vista} alt="Zona analizada" style={{ width: '100%', borderRadius: 10, border: '1px solid var(--borde)' }} />
+          </div>
+        )}
 
         {candidatos.length > 0 && (
           <div style={{ marginTop: 12 }}>
