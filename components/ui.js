@@ -31,4 +31,17 @@ export function Campo({ label, children }) {
   return <div><label>{label}</label>{children}</div>;
 }
 
-export const Cargando = () => <p className="muted">Cargando…</p>;
+/** Carga dentro de una sección: ruedita + texto */
+export const Cargando = ({ texto = 'Cargando…' }) => (
+  <div className="loader-inline" role="status" aria-live="polite"><span className="spinner" /> {texto}</div>
+);
+
+/** Pantalla de carga completa (al abrir el panel) */
+export const PantallaCarga = ({ texto = 'Cargando…' }) => (
+  <div className="loader-full" role="status" aria-live="polite">
+    <div className="loader-logo"><span>✈️</span></div>
+    <div className="loader-marca">Aerotienda</div>
+    <div className="loader-barra"><i /></div>
+    <div className="muted">{texto}</div>
+  </div>
+);

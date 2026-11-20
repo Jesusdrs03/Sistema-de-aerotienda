@@ -7,6 +7,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { getAuthClient, getDb } from '@/lib/firebase';
 import { APP_NAME, sedeNombre } from '@/lib/config';
 import { AdminContext } from '@/components/AdminContext';
+import { PantallaCarga } from '@/components/ui';
 
 const NAV = [
   ['/admin', '📊 Inicio'],
@@ -30,7 +31,7 @@ export default function AdminLayout({ children }) {
     setSt({ loading: false, user: u, admin });
   }), [router]);
 
-  if (st.loading) return <p style={{ padding: 30 }} className="muted">Cargando…</p>;
+  if (st.loading) return <PantallaCarga texto="Abriendo tu panel…" />;
   if (!st.admin) {
     return (
       <div style={{ maxWidth: 480, margin: '80px auto' }} className="card">
